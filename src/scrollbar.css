@@ -1,0 +1,20 @@
+/* Scrollbar para Chrome, Edge e Safari */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000; /* fundo do track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4b0082; /* roxo escuro */
+  border-radius: 6px;
+  border: 3px solid #000000;
+}
+
+/* Scrollbar para Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4b0082 #000000; /* thumb e track */
+}
