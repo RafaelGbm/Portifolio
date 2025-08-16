@@ -1,13 +1,16 @@
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import { skills } from '../Data/skills';
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCoverflow, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import { skills } from "../data/skills";
 
 export default function Skills() {
   return (
-    <section id="skills" className="relative w-full py-16 bg-purple-700/10 overflow-hidden">
+    <section
+      id="skills"
+      className="relative w-full py-16 bg-purple-700/10 overflow-hidden"
+    >
       {/* Gradientes laterais mais suaves */}
       <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-purple-700/30 via-purple-700/10 to-transparent pointer-events-none z-10" />
       <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-purple-700/30 via-purple-700/10 to-transparent pointer-events-none z-10" />
@@ -16,25 +19,25 @@ export default function Skills() {
         effect="coverflow"
         grabCursor={false}
         centeredSlides={true}
-        slidesPerView={5}              // Menos slides na tela
-        spaceBetween={-10}             // Espaçamento menos negativo
+        slidesPerView={5} // Menos slides na tela
+        spaceBetween={-10} // Espaçamento menos negativo
         loop={true}
-        loopAdditionalSlides={3}       // Slides extras para loop mais suave
+        loopAdditionalSlides={3} // Slides extras para loop mais suave
         autoplay={{
-          delay: 0,                    // Sem delay = movimento contínuo
+          delay: 0, // Sem delay = movimento contínuo
           disableOnInteraction: false,
-          pauseOnMouseEnter: false,    // Não para no hover
-          reverseDirection: false,     // Direção do movimento
+          pauseOnMouseEnter: false, // Não para no hover
+          reverseDirection: false, // Direção do movimento
         }}
-        speed={3000}                   // Velocidade mais lenta = mais fluido
-        allowTouchMove={false}         // Desabilita interação manual
+        speed={3000} // Velocidade mais lenta = mais fluido
+        allowTouchMove={false} // Desabilita interação manual
         coverflowEffect={{
-          rotate: 0,                   // Sem rotação
-          stretch: 0,                  // Sem esticamento
-          depth: 100,                  // Profundidade reduzida
+          rotate: 0, // Sem rotação
+          stretch: 0, // Sem esticamento
+          depth: 100, // Profundidade reduzida
           modifier: 1,
-          slideShadows: false,         // Sem sombras
-          scale: 0.8,                  // Escala base dos slides laterais
+          slideShadows: false, // Sem sombras
+          scale: 0.8, // Escala base dos slides laterais
         }}
         breakpoints={{
           320: {
@@ -82,20 +85,20 @@ export default function Skills() {
         .skills-swiper {
           padding: 20px 0;
         }
-        
+
         .skills-swiper .swiper-slide {
           transition: transform 0.3s ease;
         }
-        
+
         .skills-swiper .swiper-slide-active {
           transform: scale(1.2) !important;
           z-index: 2;
         }
-        
+
         .skills-swiper .swiper-slide-active img {
           filter: drop-shadow(0 8px 16px rgba(147, 51, 234, 0.3));
         }
-        
+
         .skills-swiper .swiper-slide-active span {
           opacity: 1;
           font-weight: 600;
