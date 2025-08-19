@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import perfil from "../assets/perfil.jpg";
 
@@ -11,11 +11,62 @@ const textVariants = {
   }),
 };
 
+const TypeWriter = ({ words, delay = 0 }) => {
+  const [displayText, setDisplayText] = useState('');
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentCharIndex, setCurrentCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentWord = words[currentWordIndex];
+    
+    const timer = setTimeout(() => {
+      if (!isDeleting && currentCharIndex < currentWord.length) {
+        // Digitando
+        setDisplayText(currentWord.slice(0, currentCharIndex + 1));
+        setCurrentCharIndex(currentCharIndex + 1);
+      } else if (!isDeleting && currentCharIndex === currentWord.length) {
+        // Pausa no final da palavra antes de apagar
+        setTimeout(() => setIsDeleting(true), 300);
+      } else if (isDeleting && currentCharIndex > 0) {
+        // Apagando
+        setDisplayText(currentWord.slice(0, currentCharIndex - 1));
+        setCurrentCharIndex(currentCharIndex - 1);
+      } else if (isDeleting && currentCharIndex === 0) {
+        // Mudança para próxima palavra
+        setIsDeleting(false);
+        setCurrentWordIndex((currentWordIndex + 1) % words.length);
+        setTimeout(() => setCurrentCharIndex(0), 50);
+      }
+    }, delay + (isDeleting ? 8 : 20));
+
+    return () => clearTimeout(timer);
+  }, [currentCharIndex, currentWordIndex, isDeleting, words, delay]);
+
+  // Separar o texto do ponto para colorir
+  const textWithoutDot = displayText.replace('.', '');
+  const showDot = displayText.includes('.');
+
+  return (
+    <span>
+      {textWithoutDot}
+      {showDot && <span className="text-purple-600">.</span>}
+      <motion.span
+        className="text-purple-600"
+        animate={{ opacity: [1, 0] }}
+        transition={{ repeat: Infinity, duration: 0.5, ease: "easeInOut" }}
+      >
+        |
+      </motion.span>
+    </span>
+  );
+};
+
 export default function Home() {
   return (
     <section
       id="home"
-      className="pt-24 min-h-screen flex flex-col lg:flex-row items-center text-white px-6 lg:px-12 py-24 gap-12"
+      className="pt-32 min-h-screen flex flex-col lg:flex-row items-center text-white px-6 lg:px-12 py-24 gap-12"
     >
       {/* Texto à esquerda */}
       <div className="flex-1 space-y-6">
@@ -26,7 +77,7 @@ export default function Home() {
           custom={1}
           variants={textVariants}
         >
-          Rafael <span className="text-purple-600">.</span>
+          <TypeWriter words={["Rafael", "Gaspar."]} delay={500} />
         </motion.h1>
 
         <motion.p
