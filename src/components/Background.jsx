@@ -1,25 +1,9 @@
 import { useEffect, useRef } from "react";
 
-const CHARS = "01{}[]()<>=/\\;:.@#$%+-_|~";
-const randChar = () => CHARS[Math.floor(Math.random() * CHARS.length)];
-const rand = (a, b) => Math.random() * (b - a) + a;
+const GRID_SIZE = 40;
 
-const LAYERS = [
-  // Back — tiny, glacial, barely visible
-  { fontSize: 11, speed: [0.012, 0.025], headAlpha: 0.25, violetChance: 0.02 },
-  // Mid — normal size, slow drift
-  { fontSize: 14, speed: [0.03,  0.055], headAlpha: 0.5,  violetChance: 0.05 },
-  // Front — larger, slightly faster, brightest
-  { fontSize: 16, speed: [0.06,  0.1],   headAlpha: 0.85, violetChance: 0.08 },
-];
-
-function buildColumns(layer, w, h) {
-  const cols = Math.floor(w / layer.fontSize);
-  return Array.from({ length: cols }, () => ({
-    y: rand(0, h / layer.fontSize),
-    speed: rand(layer.speed[0], layer.speed[1]),
-    violet: Math.random() < layer.violetChance,
-  }));
+function lerp(a, b, t) {
+  return a + (b - a) * t;
 }
 
 export default function Background() {
@@ -29,56 +13,85 @@ export default function Background() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    let w, h, layerCols;
+    let w, h;
+
+    // ── Grid cells ──
+    let gridCols, gridRows;
+    let cells = []; // { brightness, target, timer }
+
+    const initGrid = () => {
+      gridCols = Math.ceil(w / GRID_SIZE) + 1;
+      gridRows = Math.ceil(h / GRID_SIZE) + 1;
+      cells = Array.from({ length: gridCols * gridRows }, () => ({
+        brightness: 0,
+        target: 0,
+        timer: Math.random() * 200,
+      }));
+    };
 
     const resize = () => {
       w = canvas.width = window.innerWidth;
       h = canvas.height = window.innerHeight;
-      layerCols = LAYERS.map((l) => buildColumns(l, w, h));
-      // Fill black on resize to avoid flash
-      ctx.fillStyle = "#080808";
-      ctx.fillRect(0, 0, w, h);
+      initGrid();
     };
+
     resize();
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", resize, { passive: true });
 
     let raf;
 
     const draw = () => {
       raf = requestAnimationFrame(draw);
 
-      // Fade trail — semi-transparent black overlay
-      // Lower alpha = longer, smoother trail
-      ctx.fillStyle = "rgba(8,8,8,0.045)";
-      ctx.fillRect(0, 0, w, h);
+      ctx.clearRect(0, 0, w, h);
 
-      LAYERS.forEach((layer, li) => {
-        ctx.font = `${layer.fontSize}px 'Courier New', monospace`;
+      // ────────────────────────────────────────
+      // Layer 1 — Pulsing grid
+      // ────────────────────────────────────────
+      cells.forEach((cell, i) => {
+        // Randomly pick a new brightness target
+        cell.timer--;
+        if (cell.timer <= 0) {
+          // Most cells stay dark, a few light up
+          cell.target = Math.random() < 0.08 ? Math.random() * 0.55 + 0.1 : 0;
+          cell.timer = Math.random() * 300 + 80;
+        }
 
-        layerCols[li].forEach((col, ci) => {
-          const x = ci * layer.fontSize;
-          const y = col.y * layer.fontSize;
+        // Smooth lerp toward target
+        cell.brightness = lerp(cell.brightness, cell.target, 0.018);
 
-          // Head character — bright
-          if (col.violet) {
-            ctx.fillStyle = `rgba(196,168,255,${layer.headAlpha})`;
-          } else {
-            ctx.fillStyle = `rgba(255,255,255,${layer.headAlpha})`;
-          }
-          ctx.fillText(randChar(), x, y);
+        if (cell.brightness < 0.005) return;
 
-          col.y += col.speed;
+        const col = i % gridCols;
+        const row = Math.floor(i / gridCols);
+        const x = col * GRID_SIZE;
+        const y = row * GRID_SIZE;
 
-          if (y > h && Math.random() > 0.97) {
-            col.y = 0;
-            col.violet = Math.random() < layer.violetChance;
-            col.speed = rand(layer.speed[0], layer.speed[1]);
-          }
-        });
+        // Horizontal line
+        ctx.strokeStyle = `rgba(139,92,246,${cell.brightness * 0.6})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + GRID_SIZE, y);
+        ctx.stroke();
+
+        // Vertical line
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y + GRID_SIZE);
+        ctx.stroke();
+
+        // Intersection dot
+        ctx.fillStyle = `rgba(167,139,250,${cell.brightness})`;
+        ctx.beginPath();
+        ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+        ctx.fill();
       });
+
     };
 
     draw();
+
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
