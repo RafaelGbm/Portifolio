@@ -12,6 +12,9 @@ import mysql from "../assets/Skills/MySQL.png";
 import nodejs from "../assets/Skills/nodejs.svg";
 import unreal from "../assets/Skills/unreal.png";
 import c from "../assets/Skills/C.png";
+import reactNative from "../assets/Skills/react-native.svg";
+import tensorflow from "../assets/Skills/tensorflow.svg";
+import cybersecurity from "../assets/Skills/cybersecurity.svg";
 
 export const skills = [
   { icon: git, title: "Git", description: "Controle de versão" },
@@ -28,4 +31,7 @@ export const skills = [
   { icon: nodejs, title: "Node.js", description: "Backend" },
   { icon: unreal, title: "Unreal Engine", description: "Game Development" },
   { icon: c, title: "C#", description: "Backend" },
+  { icon: reactNative, title: "React Native", description: "Mobile" },
+  { icon: tensorflow, title: "Machine Learning", description: "IA" },
+  { icon: cybersecurity, title: "Cybersecurity", description: "Segurança" },
 ];

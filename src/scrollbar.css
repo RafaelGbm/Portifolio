@@ -1,20 +1,23 @@
-/* Scrollbar para Chrome, Edge e Safari */
+/* Custom scrollbar — dark theme */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000; /* fundo do track */
+  background: #080808;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #4b0082; /* roxo escuro */
-  border-radius: 6px;
-  border: 3px solid #000000;
+  background: #2a2a2a;
+  border-radius: 0;
 }
 
-/* Scrollbar para Firefox */
+::-webkit-scrollbar-thumb:hover {
+  background: #7c3aed;
+}
+
+/* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #4b0082 #000000; /* thumb e track */
+  scrollbar-color: #2a2a2a #080808;
 }

@@ -1,60 +1,91 @@
+import { motion } from "framer-motion";
+
 export default function GithubStats() {
+  const user = "RafaelGbm";
+
+  const statsUrl = `https://github-readme-stats.vercel.app/api?username=${user}&show_icons=true&count_private=true&hide_border=true&bg_color=0f0f0f&title_color=a78bfa&text_color=888888&icon_color=7c3aed&ring_color=7c3aed`;
+
+  const langsUrl = `https://github-readme-stats.vercel.app/api/top-langs/?username=${user}&layout=compact&hide_border=true&bg_color=0f0f0f&title_color=a78bfa&text_color=888888`;
+
+  const streakUrl = `https://streak-stats.demolab.com/?user=${user}&hide_border=true&background=0f0f0f&ring=7c3aed&fire=a78bfa&currStreakLabel=a78bfa&sideLabels=666666&dates=444444&currStreakNum=f0f0f0&sideNums=f0f0f0&stroke=0f0f0f`;
+
   return (
-    <section
-      id="github-stats"
-      className="py-24 text-white text-center "
-    >
-      <h3 className="text-3xl font-bold mb-12 text-white bg-clip-text">
-        GitHub Stats
-      </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-7xl mx-auto px-6 lg:px-12">
-        {/* Card de Perfil */}
-        <div className="bg-white/10 p-8 rounded-xl shadow-lg
-                       hover:shadow-purple-700 transform hover:scale-105
-                       transition-all duration-300 flex flex-col items-center">
-          <div className="p-6 h-full flex flex-col">
-            <h4 className="text-lg font-semibold mb-4 text-purple-300">Estatísticas Gerais</h4>
-            <div className="flex-1 flex items-center justify-center">
-              <img
-                src="https://github-readme-stats.vercel.app/api?username=RafaelGbm&show_icons=true&theme=tokyonight&count_private=true&bg_color=1a0b2e&title_color=a855f7&text_color=e879f9&icon_color=c084fc"
-                className="w-auto rounded-lg"
-                alt="GitHub Stats"
-              />
-            </div>
+    <section id="github-stats" className="py-24 px-6 lg:px-16">
+      {/* Section header with number */}
+      <div className="relative mb-16">
+        <span className="absolute -top-10 left-0 font-black text-[7rem] leading-none text-[#111] select-none pointer-events-none">
+          05
+        </span>
+        <div className="relative">
+          <div className="font-mono text-xs uppercase tracking-widest text-[#444] mb-4">
+            // github
           </div>
-        </div>
-        
-        {/* Card de Linguagens */}
-        <div className="bg-white/10 p-8 rounded-xl shadow-lg
-                       hover:shadow-purple-700 transform hover:scale-105
-                       transition-all duration-300 flex flex-col items-center">
-          <div className="p-6 h-full flex flex-col">
-            <h4 className="text-lg font-semibold mb-4 text-purple-300">Linguagens Mais Usadas</h4>
-            <div className="flex-1 flex items-center justify-center">
-              <img
-                src="https://github-readme-stats.vercel.app/api/top-langs/?username=RafaelGbm&show_icons=true&theme=tokyonight&layout=compact&bg_color=1a0b2e&title_color=a855f7&text_color=e879f9"
-                className="w-96 rounded-lg"
-                alt="Top Languages"
-              />
-            </div>
-          </div>
+          <h2
+            className="font-black text-[#f0f0f0] leading-tight tracking-tighter"
+            style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
+          >
+            Atividade
+          </h2>
         </div>
       </div>
-      
-      {/* Card adicional com streak stats */}
-      <div className="mt-10 max-w-2xl mx-auto px-6 lg:px-12">
-        <div className="bg-white/10 p-8 rounded-xl shadow-lg
-                       hover:shadow-purple-700 transform hover:scale-105
-                       transition-all duration-300 flex flex-col items-center">
-          <div className="p-6">
-            <h4 className="text-lg font-semibold mb-4 text-purple-300">Sequência de Contribuições</h4>
-            <img
-              src="https://github-readme-streak-stats.herokuapp.com/?user=RafaelGbm&theme=tokyonight&background=1a0b2e&ring=a855f7&fire=e879f9&currStreakLabel=c084fc"
-              className="w-full rounded-lg"
-              alt="GitHub Streak"
-            />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl">
+        {/* General stats */}
+        <motion.div
+          className="bg-[#0f0f0f] border border-[#1e1e1e] p-6 flex flex-col gap-3 hover:border-violet-500/30 transition-colors duration-200"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="font-mono text-[10px] uppercase tracking-widest text-[#444]">
+            estatísticas gerais
           </div>
-        </div>
+          <img
+            src={statsUrl}
+            alt="GitHub Stats"
+            className="w-full"
+            loading="lazy"
+          />
+        </motion.div>
+
+        {/* Top languages */}
+        <motion.div
+          className="bg-[#0f0f0f] border border-[#1e1e1e] p-6 flex flex-col gap-3 hover:border-violet-500/30 transition-colors duration-200"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <div className="font-mono text-[10px] uppercase tracking-widest text-[#444]">
+            linguagens mais usadas
+          </div>
+          <img
+            src={langsUrl}
+            alt="Top Languages"
+            className="w-full"
+            loading="lazy"
+          />
+        </motion.div>
+
+        {/* Streak */}
+        <motion.div
+          className="md:col-span-2 bg-[#0f0f0f] border border-[#1e1e1e] p-6 flex flex-col gap-3 hover:border-violet-500/30 transition-colors duration-200"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div className="font-mono text-[10px] uppercase tracking-widest text-[#444]">
+            sequência de contribuições
+          </div>
+          <img
+            src={streakUrl}
+            alt="GitHub Streak"
+            className="w-full max-w-2xl mx-auto"
+            loading="lazy"
+          />
+        </motion.div>
       </div>
     </section>
   );

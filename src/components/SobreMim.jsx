@@ -1,15 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { User, MapPin, GraduationCap, Code, Download } from "lucide-react";
+import { MapPin, GraduationCap, Download } from "lucide-react";
+import perfil from "../assets/perfil.jpg";
 
-const textVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i = 1) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.3, duration: 0.8 },
-  }),
-};
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.6, delay },
+});
 
 export default function SobreMim() {
   const handleDownloadCV = () => {
@@ -19,129 +18,117 @@ export default function SobreMim() {
     link.click();
   };
 
+  const stats = [
+    { value: "29", label: "Anos" },
+    { value: "5º", label: "Semestre FIAP" },
+    { value: "6+", label: "Tecnologias" },
+    { value: "100%", label: "Dedicação" },
+  ];
+
   return (
-    <section
-      id="sobre"
-      className="min-h-screen flex flex-col lg:flex-row items-center text-white px-6 lg:px-12 py-24 gap-12"
-    >
-      {/* Texto à esquerda */}
-      <div className="flex-1 space-y-6">
-        <motion.h2
-          className="text-4xl sm:text-5xl font-bold flex items-center gap-3"
-          initial="hidden"
-          animate="visible"
-          custom={1}
-          variants={textVariants}
-        >
-          <User className="text-purple-400" size={40} />
-          Sobre Mim
-        </motion.h2>
-
-        <motion.p
-          className="text-lg sm:text-xl text-white/80 leading-relaxed"
-          initial="hidden"
-          animate="visible"
-          custom={2}
-          variants={textVariants}
-        >
-          Olá! Me chamo{" "}
-          <span className="text-purple-400 font-semibold">Rafael Gaspar</span>, tenho 29 anos e sou um desenvolvedor{" "}
-          <span className="text-purple-400 font-semibold">Full Stack</span>{" "}
-          apaixonado por tecnologia e inovação.
-        </motion.p>
-
-        <motion.p
-          className="text-lg sm:text-xl text-white/80 leading-relaxed"
-          initial="hidden"
-          animate="visible"
-          custom={3}
-          variants={textVariants}
-        >
-          Atualmente estou no{" "}
-          <span className="text-purple-400 font-semibold">4º semestre</span> de Engenharia de Software na{" "}
-          <span className="text-purple-400 font-semibold">FIAP</span>, desenvolvendo conhecimentos em React, Spring Boot,
-          Java, Python, Blockchain e Big Data.
-        </motion.p>
-
-        <motion.p
-          className="text-lg sm:text-xl text-white/80 leading-relaxed"
-          initial="hidden"
-          animate="visible"
-          custom={4}
-          variants={textVariants}
-        >
-          Busco constantemente{" "}
-          <span className="text-purple-400 font-semibold">oportunidades de estágio</span> e projetos desafiadores para
-          aplicar minhas habilidades, contribuir com soluções inovadoras e expandir minha experiência profissional.
-        </motion.p>
-
-        <motion.button
-          onClick={handleDownloadCV}
-          className="inline-flex items-center gap-3 bg-purple-600 text-white font-semibold py-4 px-8 rounded-lg text-lg shadow-lg"
-          whileHover={{ scale: 1.1, boxShadow: "0 10px 20px rgba(139, 92, 246, 0.5)" }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Download size={22} />
-          Baixar Currículo
-        </motion.button>
+    <section id="sobre" className="py-24 px-6 lg:px-16">
+      {/* Section header with large number */}
+      <div className="relative mb-16">
+        <span className="absolute -top-10 left-0 font-black text-[7rem] leading-none text-[#111] select-none pointer-events-none">
+          01
+        </span>
+        <div className="relative">
+          <div className="font-mono text-xs uppercase tracking-widest text-[#444] mb-4">
+            // sobre mim
+          </div>
+          <h2
+            className="font-black text-[#f0f0f0] leading-tight tracking-tighter"
+            style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
+          >
+            Quem sou
+          </h2>
+        </div>
       </div>
 
-      {/* Infos em cards à direita */}
-      <motion.div
-        className="flex-1 space-y-6"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        {/* Card Localização */}
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:border-purple-400/30">
-          <div className="flex items-center gap-4 mb-4">
-            <MapPin className="text-purple-400" size={24} />
-            <h4 className="font-semibold text-xl">Localização</h4>
-          </div>
-          <p className="text-gray-300 text-lg">São Paulo, SP - Brasil</p>
-        </div>
+      {/* Bento grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl">
 
-        {/* Card Formação */}
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:border-purple-400/30">
-          <div className="flex items-center gap-4 mb-4">
-            <GraduationCap className="text-purple-400" size={24} />
-            <h4 className="font-semibold text-xl">Formação</h4>
+        {/* Photo block — tall, left column */}
+        <motion.div
+          className="md:row-span-2 bg-[#111] border border-[#1e1e1e] overflow-hidden relative group"
+          style={{ minHeight: "420px" }}
+          {...fadeUp(0)}
+        >
+          <img
+            src={perfil}
+            alt="Rafael Gaspar"
+            className="w-full h-full object-cover object-center absolute inset-0 group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-black/90 via-black/40 to-transparent">
+            <div className="text-white font-bold text-xl">Rafael Gaspar</div>
+            <div className="text-violet-400 text-sm font-mono mt-1">Full Stack Dev</div>
           </div>
-          <p className="text-gray-300 text-lg">Engenharia de Software - FIAP</p>
-          <p className="text-gray-400 mt-2">4º Semestre</p>
-        </div>
+          {/* Corner accent */}
+          <div className="absolute top-4 right-4 w-2 h-2 bg-violet-500" />
+        </motion.div>
 
-        {/* Card Especialização */}
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:border-purple-400/30">
-          <div className="flex items-center gap-4 mb-4">
-            <Code className="text-purple-400" size={24} />
-            <h4 className="font-semibold text-xl">Especialização</h4>
-          </div>
-          <p className="text-gray-300 text-lg">Full Stack Development</p>
-          <p className="text-gray-400 mt-2">React • Spring Boot • Java • Python • Blockchain</p>
-        </div>
+        {/* Bio block */}
+        <motion.div
+          className="md:col-span-2 bg-[#111] border border-[#1e1e1e] p-8"
+          {...fadeUp(0.1)}
+        >
+          <h3 className="text-3xl md:text-4xl font-black text-[#f0f0f0] mb-5 leading-tight">
+            Desenvolvedor<br />
+            <span className="text-violet-400">Full Stack</span>
+          </h3>
+          <p className="text-[#666] leading-relaxed mb-7 text-sm md:text-base">
+            29 anos, apaixonado por tecnologia e soluções digitais. Cursando{" "}
+            <span className="text-[#ccc]">Engenharia de Software na FIAP</span> — 5º semestre.
+            Busco oportunidades de estágio para aplicar habilidades em React, React Native,
+            Spring Boot, Java, Python, Blockchain e Big Data.
+          </p>
+          <button
+            onClick={handleDownloadCV}
+            className="inline-flex items-center gap-2 border border-[#2a2a2a] hover:border-violet-500 text-[#666] hover:text-[#f0f0f0] text-sm font-medium py-3 px-6 transition-all duration-200"
+          >
+            <Download size={14} />
+            Currículo
+          </button>
+        </motion.div>
 
-        {/* Estatísticas rápidas */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-12 pt-8 border-t border-white/10">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-purple-400 mb-2">29</div>
-            <div className="text-gray-400">Anos</div>
+        {/* Info chips */}
+        <motion.div
+          className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"
+          {...fadeUp(0.2)}
+        >
+          <div className="bg-[#111] border border-[#1e1e1e] p-6 flex items-start gap-4 hover:border-violet-500/30 transition-colors duration-200">
+            <MapPin className="text-violet-400 mt-0.5 shrink-0" size={18} />
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-widest text-[#444] mb-1">Localização</div>
+              <div className="text-[#f0f0f0] font-medium text-sm">São Paulo, SP — Brasil</div>
+            </div>
           </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-purple-400 mb-2">4º</div>
-            <div className="text-gray-400">Semestre</div>
+          <div className="bg-[#111] border border-[#1e1e1e] p-6 flex items-start gap-4 hover:border-violet-500/30 transition-colors duration-200">
+            <GraduationCap className="text-violet-400 mt-0.5 shrink-0" size={18} />
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-widest text-[#444] mb-1">Formação</div>
+              <div className="text-[#f0f0f0] font-medium text-sm">Eng. Software — FIAP</div>
+              <div className="text-[#444] text-xs mt-0.5">5º Semestre · 2024–2027</div>
+            </div>
           </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-purple-400 mb-2">6+</div>
-            <div className="text-gray-400">Tecnologias</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-purple-400 mb-2">100%</div>
-            <div className="text-gray-400">Dedicação</div>
-          </div>
-        </div>
-      </motion.div>
+        </motion.div>
+
+        {/* Stats */}
+        <motion.div
+          className="md:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4"
+          {...fadeUp(0.3)}
+        >
+          {stats.map((stat, i) => (
+            <div
+              key={i}
+              className="bg-[#111] border border-[#1e1e1e] p-8 text-center hover:border-violet-500/30 transition-colors duration-200"
+            >
+              <div className="text-4xl font-black text-violet-400 mb-2">{stat.value}</div>
+              <div className="font-mono text-[10px] uppercase tracking-widest text-[#444]">{stat.label}</div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
     </section>
   );
 }

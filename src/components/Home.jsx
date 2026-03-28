@@ -1,133 +1,157 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import perfil from "../assets/perfil.jpg";
+import { ArrowDown, Download } from "lucide-react";
 
-const textVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i = 1) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.3, duration: 0.8 },
-  }),
-};
+const TERMINAL_TEXTS = [
+  "full-stack developer",
+  "react enthusiast",
+  "problem solver",
+  "software engineer",
+];
 
-const TypeWriter = ({ words, delay = 0 }) => {
-  const [displayText, setDisplayText] = useState('');
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [currentCharIndex, setCurrentCharIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
+function TerminalLine() {
+  const [text, setText] = useState("");
+  const [wordIdx, setWordIdx] = useState(0);
+  const [charIdx, setCharIdx] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    const currentWord = words[currentWordIndex];
-    
+    if (paused) return;
+    const word = TERMINAL_TEXTS[wordIdx];
+    const speed = deleting ? 40 : 80;
+
     const timer = setTimeout(() => {
-      if (!isDeleting && currentCharIndex < currentWord.length) {
-        // Digitando
-        setDisplayText(currentWord.slice(0, currentCharIndex + 1));
-        setCurrentCharIndex(currentCharIndex + 1);
-      } else if (!isDeleting && currentCharIndex === currentWord.length) {
-        // Pausa no final da palavra antes de apagar
-        setTimeout(() => setIsDeleting(true), 300);
-      } else if (isDeleting && currentCharIndex > 0) {
-        // Apagando
-        setDisplayText(currentWord.slice(0, currentCharIndex - 1));
-        setCurrentCharIndex(currentCharIndex - 1);
-      } else if (isDeleting && currentCharIndex === 0) {
-        // Mudança para próxima palavra
-        setIsDeleting(false);
-        setCurrentWordIndex((currentWordIndex + 1) % words.length);
-        setTimeout(() => setCurrentCharIndex(0), 50);
+      if (!deleting && charIdx < word.length) {
+        setText(word.slice(0, charIdx + 1));
+        setCharIdx((c) => c + 1);
+      } else if (!deleting && charIdx === word.length) {
+        setPaused(true);
+        setTimeout(() => {
+          setPaused(false);
+          setDeleting(true);
+        }, 2000);
+      } else if (deleting && charIdx > 0) {
+        setText(word.slice(0, charIdx - 1));
+        setCharIdx((c) => c - 1);
+      } else {
+        setDeleting(false);
+        setWordIdx((i) => (i + 1) % TERMINAL_TEXTS.length);
       }
-    }, delay + (isDeleting ? 8 : 20));
+    }, speed);
 
     return () => clearTimeout(timer);
-  }, [currentCharIndex, currentWordIndex, isDeleting, words, delay]);
-
-  // Separar o texto do ponto para colorir
-  const textWithoutDot = displayText.replace('.', '');
-  const showDot = displayText.includes('.');
+  }, [charIdx, deleting, paused, wordIdx]);
 
   return (
-    <span>
-      {textWithoutDot}
-      {showDot && <span className="text-purple-600">.</span>}
-      <motion.span
-        className="text-purple-600"
-        animate={{ opacity: [1, 0] }}
-        transition={{ repeat: Infinity, duration: 0.5, ease: "easeInOut" }}
-      >
-        |
-      </motion.span>
-    </span>
+    <div className="font-mono text-sm md:text-base flex flex-wrap items-center gap-x-2 gap-y-1">
+      <span className="text-violet-500">$</span>
+      <span className="text-violet-300">rafael</span>
+      <span className="text-[#333]">--role</span>
+      <span className="text-[#888]">
+        &quot;{text}
+        <span className="cursor-blink text-violet-400">|</span>
+        &quot;
+      </span>
+    </div>
   );
-};
+}
 
 export default function Home() {
+  const scrollToProjects = () => {
+    document.getElementById("projetos")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const downloadCV = () => {
+    const link = document.createElement("a");
+    link.href = "/CV.pdf";
+    link.download = "Rafael_Gaspar_CV.pdf";
+    link.click();
+  };
+
   return (
     <section
       id="home"
-      className="pt-32 min-h-screen flex flex-col lg:flex-row items-center text-white px-6 lg:px-12 py-24 gap-12"
+      className="min-h-screen flex flex-col justify-center px-6 lg:px-16 pt-28 pb-20 relative overflow-hidden"
     >
-      {/* Texto à esquerda */}
-      <div className="flex-1 space-y-6">
-        <motion.h1
-          className="text-5xl sm:text-6xl font-bold"
-          initial="hidden"
-          animate="visible"
-          custom={1}
-          variants={textVariants}
-        >
-          <TypeWriter words={["Rafael", "Gaspar."]} delay={500} />
-        </motion.h1>
 
-        <motion.p
-          className="text-lg sm:text-xl text-white/80 leading-relaxed"
-          initial="hidden"
-          animate="visible"
-          custom={2}
-          variants={textVariants}
-        >
-          Olá! Sou <span className="text-purple-400 font-semibold">Rafael Gaspar</span>, desenvolvedor{" "}
-          <span className="text-purple-400 font-semibold">Full Stack</span> apaixonado por tecnologia, inovação e criação de soluções digitais modernas.
-        </motion.p>
-
-        <motion.p
-          className="text-lg sm:text-xl text-white/80 leading-relaxed"
-          initial="hidden"
-          animate="visible"
-          custom={3}
-          variants={textVariants}
-        >
-          Tenho experiência e conhecimentos em <span className="text-purple-400 font-semibold">React, Spring Boot, Java, Python, Blockchain, Big Data, Unreal Engine com C#</span>. Busco oportunidades de estágio e projetos desafiadores para aplicar minhas habilidades, contribuir com soluções inovadoras e expandir minha experiência profissional.
-        </motion.p>
-
-        <motion.p
-          className="text-lg sm:text-xl text-white/80 leading-relaxed"
-          initial="hidden"
-          animate="visible"
-          custom={4}
-          variants={textVariants}
-        >
-          Minha missão é criar experiências digitais eficientes e modernas, sempre com dedicação, criatividade e paixão pelo que faço.
-        </motion.p>
-      </div>
-
-      {/* Foto à direita com animação */}
       <motion.div
-        className="flex-1 flex justify-center"
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        className="relative max-w-5xl"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
       >
-        <motion.img
-          src={perfil}
-          alt="Rafael Gaspar"
-          className="w-64 h-64 sm:w-72 sm:h-72 rounded-full shadow-2xl border-4 border-purple-600 object-cover"
-          animate={{ y: [0, -10, 0] }}
-          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-        />
+        {/* Availability badge */}
+        <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#444] mb-10">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          disponível para estágio
+        </div>
+
+        {/* Massive name */}
+        <h1
+          className="font-black leading-[0.88] tracking-tighter mb-3 select-none"
+          style={{ fontSize: "clamp(4.5rem, 13vw, 11rem)" }}
+        >
+          <span className="block text-[#f0f0f0]">RAFAEL</span>
+          <span className="block text-stroke">GASPAR</span>
+        </h1>
+
+        {/* Thin accent line */}
+        <div className="flex items-center gap-4 mb-8">
+          <div className="h-px w-12 bg-violet-500" />
+          <span className="font-mono text-[10px] uppercase tracking-widest text-[#333]">
+            São Paulo · Brasil
+          </span>
+        </div>
+
+        {/* Terminal line */}
+        <div className="mb-12">
+          <TerminalLine />
+        </div>
+
+        {/* CTAs */}
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={scrollToProjects}
+            className="inline-flex items-center gap-2 bg-violet-500 hover:bg-violet-400 text-white text-sm font-medium py-3 px-6 transition-colors duration-200"
+          >
+            Ver projetos
+            <ArrowDown size={14} />
+          </button>
+          <button
+            onClick={downloadCV}
+            className="inline-flex items-center gap-2 border border-[#2a2a2a] hover:border-violet-500 text-[#555] hover:text-[#f0f0f0] text-sm font-medium py-3 px-6 transition-all duration-200"
+          >
+            <Download size={14} />
+            Currículo
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Year stamp — bottom right */}
+      <motion.div
+        className="absolute bottom-8 right-6 lg:right-16 font-mono text-[10px] uppercase tracking-widest text-[#282828] select-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+      >
+        © 2025
+      </motion.div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-8 left-6 lg:left-16 flex flex-col items-center gap-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.4 }}
+      >
+        <div className="w-px h-14 bg-linear-to-b from-transparent to-[#2a2a2a]" />
+        <span
+          className="font-mono text-[10px] uppercase tracking-widest text-[#333]"
+          style={{ writingMode: "vertical-lr" }}
+        >
+          scroll
+        </span>
       </motion.div>
     </section>
   );
