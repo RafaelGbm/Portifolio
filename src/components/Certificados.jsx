@@ -1,58 +1,82 @@
-import { Award, Star, Database } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
+import SectionHeader from "./SectionHeader";
 
 const certifications = [
-  { name: "Design Thinking", icon: Award, year: "2024" },
-  { name: "Blockchain Essentials", icon: Star, year: "2023" },
-  { name: "Formação Social e Sustentabilidade", icon: Award, year: "2024" },
-  { name: "Big Data & Analytics", icon: Database, year: "2023" },
+  {
+    name: "Design Thinking",
+    institution: "FIAP",
+    year: "2024",
+    description: "Metodologia de inovação centrada no ser humano para resolução criativa de problemas.",
+  },
+  {
+    name: "Blockchain Essentials",
+    institution: "FIAP",
+    year: "2023",
+    description: "Fundamentos de blockchain, contratos inteligentes e aplicações descentralizadas.",
+  },
+  {
+    name: "Formação Social e Sustentabilidade",
+    institution: "FIAP",
+    year: "2024",
+    description: "Impacto social da tecnologia e práticas sustentáveis no desenvolvimento de software.",
+  },
+  {
+    name: "Desenvolvimento Java Enterprise",
+    institution: "FIAP",
+    year: "2024",
+    description: "Desenvolvimento de aplicações corporativas com Java EE, APIs REST e boas práticas de arquitetura.",
+  },
+  {
+    name: "Big Data & Analytics",
+    institution: "FIAP",
+    year: "2023",
+    description: "Coleta, processamento e análise de grandes volumes de dados para tomada de decisão.",
+  },
 ];
 
 export default function Certificados() {
   return (
     <section id="certificados" className="py-24 px-6 lg:px-16">
-      {/* Section header with number */}
-      <div className="relative mb-16">
-        <span className="absolute -top-10 left-0 font-black text-[7rem] leading-none text-[#111] select-none pointer-events-none">
-          04
-        </span>
-        <div className="relative">
-          <div className="font-mono text-xs uppercase tracking-widest text-[#444] mb-4">
-            // certificados
-          </div>
-          <h2
-            className="font-black text-[#f0f0f0] leading-tight tracking-tighter"
-            style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
-          >
-            Certificações
-          </h2>
-        </div>
-      </div>
+      <SectionHeader number="04" label="certificados" title="Certificações" flip />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl">
-        {certifications.map((cert, idx) => {
-          const Icon = cert.icon;
-          return (
-            <motion.div
-              key={idx}
-              className="bg-[#111] border border-[#1e1e1e] p-6 flex items-center gap-5 group hover:border-violet-500/40 transition-all duration-200"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.08, duration: 0.4 }}
-            >
-              <div className="text-violet-400 group-hover:text-violet-300 transition-colors shrink-0">
-                <Icon size={22} />
-              </div>
-              <div className="min-w-0">
-                <h4 className="text-[#f0f0f0] font-medium text-sm leading-snug">{cert.name}</h4>
-                <div className="font-mono text-[10px] uppercase tracking-widest text-[#444] mt-1">
-                  FIAP · {cert.year}
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
+      <div className="max-w-4xl">
+        {certifications.map((cert, idx) => (
+          <motion.div
+            key={idx}
+            className="group border-t border-[#1e1e1e] py-6 flex flex-col sm:flex-row sm:items-start gap-4 hover:border-violet-500/30 transition-colors duration-300"
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: idx * 0.08, duration: 0.4 }}
+          >
+            {/* Number */}
+            <span className="font-mono text-[#1e1e1e] group-hover:text-[#2a2a2a] text-3xl font-black leading-none transition-colors duration-300 select-none shrink-0 w-12">
+              {String(idx + 1).padStart(2, "0")}
+            </span>
+
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <h4 className="text-[#f0f0f0] font-black text-lg tracking-tight group-hover:text-white transition-colors duration-200 mb-1">
+                {cert.name}
+              </h4>
+              <p className="text-[#444] group-hover:text-[#666] text-sm leading-relaxed transition-colors duration-200">
+                {cert.description}
+              </p>
+            </div>
+
+            {/* Meta */}
+            <div className="flex sm:flex-col items-start sm:items-end gap-2 sm:gap-1 shrink-0">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-violet-400 border border-violet-500/20 px-2 py-0.5">
+                {cert.institution}
+              </span>
+              <span className="font-mono text-[10px] uppercase tracking-widest text-[#333]">
+                {cert.year}
+              </span>
+            </div>
+          </motion.div>
+        ))}
+        <div className="border-t border-[#1e1e1e]" />
       </div>
     </section>
   );
