@@ -31,7 +31,7 @@ export default function Footer() {
             <ArrowUpRight size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
           </a>
           <a
-            href="https://www.linkedin.com/in/rafael-gaspar-549470204"
+            href="https://www.linkedin.com/in/rafael-gaspar-dev/"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-1.5 text-[#333] hover:text-violet-400 transition-colors font-mono text-[11px] uppercase tracking-widest"

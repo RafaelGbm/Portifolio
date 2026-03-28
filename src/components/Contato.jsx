@@ -27,10 +27,10 @@ const contactItems = [
   },
   {
     label: "LinkedIn",
-    value: "rafael-gaspar-549470204",
+    value: "rafael-gaspar-dev",
     icon: Linkedin,
     type: "external",
-    href: "https://www.linkedin.com/in/rafael-gaspar-549470204/",
+    href: "https://www.linkedin.com/in/rafael-gaspar-dev/",
   },
 ];
 
