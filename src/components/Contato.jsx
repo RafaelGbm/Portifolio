@@ -1,6 +1,7 @@
 import { Mail, Phone, Github, Linkedin, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import SectionHeader from "./SectionHeader";
 
 const contactItems = [
   {
@@ -36,44 +37,41 @@ const contactItems = [
 function ContactCard({ item, delay }) {
   const Icon = item.icon;
 
-  const inner = (
-    <div className="bg-[#080808] p-7 flex items-start justify-between group hover:bg-[#0d0d0d] transition-colors duration-200 cursor-pointer h-full">
-      <div className="flex items-start gap-4">
-        <Icon className="text-violet-400 mt-0.5 shrink-0" size={18} />
-        <div>
-          <div className="font-mono text-[10px] uppercase tracking-widest text-[#444] mb-2">
-            {item.label}
-          </div>
-          <div className="text-[#f0f0f0] text-sm font-medium">{item.value}</div>
+  const content = (
+    <div className="p-8 flex flex-col justify-between gap-6 h-full group hover:bg-[#0f0f0f] transition-colors duration-200 cursor-pointer">
+      <div className="flex items-center justify-between">
+        <div className="w-12 h-12 flex items-center justify-center bg-violet-500/10 group-hover:bg-violet-500/20 transition-colors duration-200">
+          <Icon className="text-violet-400" size={22} />
+        </div>
+        <ArrowUpRight
+          size={18}
+          className="text-[#2a2a2a] group-hover:text-violet-400 transition-colors"
+        />
+      </div>
+      <div>
+        <div className="font-mono text-[10px] uppercase tracking-widest text-[#444] mb-2">
+          {item.label}
+        </div>
+        <div className="text-[#f0f0f0] font-semibold text-sm leading-snug truncate">
+          {item.value}
         </div>
       </div>
-      <ArrowUpRight
-        size={15}
-        className="text-[#2a2a2a] group-hover:text-violet-400 transition-colors shrink-0 mt-1"
-      />
     </div>
   );
 
-  const wrapped =
-    item.type === "route" ? (
-      <Link to={item.to} className="block h-full">
-        {inner}
-      </Link>
-    ) : (
-      <a href={item.href} target="_blank" rel="noreferrer" className="block h-full">
-        {inner}
-      </a>
-    );
-
   return (
     <motion.div
-      className="border border-[#1e1e1e]"
-      initial={{ opacity: 0, y: 10 }}
+      className="bg-[#111] border border-[#1e1e1e] hover:border-violet-500/40 transition-colors duration-200"
+      initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.4 }}
     >
-      {wrapped}
+      {item.type === "route" ? (
+        <Link to={item.to} className="block h-full">{content}</Link>
+      ) : (
+        <a href={item.href} target="_blank" rel="noreferrer" className="block h-full">{content}</a>
+      )}
     </motion.div>
   );
 }
@@ -81,28 +79,9 @@ function ContactCard({ item, delay }) {
 export default function Contato() {
   return (
     <section id="contato" className="py-24 px-6 lg:px-16">
-      {/* Section header with number */}
-      <div className="relative mb-16">
-        <span className="absolute -top-10 left-0 font-black text-[7rem] leading-none text-[#111] select-none pointer-events-none">
-          06
-        </span>
-        <div className="relative">
-          <div className="font-mono text-xs uppercase tracking-widest text-[#444] mb-4">
-            // contato
-          </div>
-          <h2
-            className="font-black text-[#f0f0f0] leading-tight tracking-tighter mb-4"
-            style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
-          >
-            Fale comigo
-          </h2>
-          <p className="text-[#444] text-sm max-w-lg">
-            Disponível para estágio e projetos. Se tiver uma oportunidade interessante, manda uma mensagem.
-          </p>
-        </div>
-      </div>
+      <SectionHeader number="06" label="contato" title="Fale comigo" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl">
         {contactItems.map((item, i) => (
           <ContactCard key={i} item={item} delay={i * 0.08} />
         ))}
