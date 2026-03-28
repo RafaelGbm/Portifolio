@@ -1,15 +1,14 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { skills } from "../data/skills";
+import SectionHeader from "./SectionHeader";
 
-// Two rows going in opposite directions
+// Built once at module level — not recreated on every render
 const row1 = [...skills, ...skills, ...skills];
 const row2 = [...skills].reverse().concat([...skills].reverse(), [...skills].reverse());
 
 function MarqueeRow({ items, reverse = false, speed = 40 }) {
   return (
     <div className="overflow-hidden relative">
-      {/* Fade edges */}
       <div className="absolute left-0 top-0 bottom-0 w-20 bg-linear-to-r from-[#080808] to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-20 bg-linear-to-l from-[#080808] to-transparent z-10 pointer-events-none" />
 
@@ -43,27 +42,10 @@ function MarqueeRow({ items, reverse = false, speed = 40 }) {
 export default function Skills() {
   return (
     <section id="skills" className="py-24">
-      {/* Section header */}
       <div className="px-6 lg:px-16">
-        <div className="relative mb-16">
-          <span className="absolute -top-10 left-0 font-black text-[7rem] leading-none text-[#111] select-none pointer-events-none">
-            02
-          </span>
-          <div className="relative">
-            <div className="font-mono text-xs uppercase tracking-widest text-[#444] mb-4">
-              // stack
-            </div>
-            <h2
-              className="font-black text-[#f0f0f0] leading-tight tracking-tighter"
-              style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
-            >
-              Tecnologias
-            </h2>
-          </div>
-        </div>
+        <SectionHeader number="02" label="stack" title="Tecnologias" flip />
       </div>
 
-      {/* Marquee rows */}
       <motion.div
         className="flex flex-col gap-3"
         initial={{ opacity: 0 }}
