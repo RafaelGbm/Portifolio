@@ -10,7 +10,7 @@ import SectionHeader from "./SectionHeader";
 const projects = [
   {
     title: "FireSentinel",
-    description: "Sistema CLI com IA para prever queimadas e coletar informações de sensores IoT: cadastro, leitura, análise de dados e gerenciamento de ocorrências.",
+    description: "Desenvolvi o módulo de IA para previsão de queimadas e a integração com sensores IoT — coleta de dados em tempo real, análise de risco e disparo de alertas via CLI em Python.",
     image: firesentinel,
     github: "https://github.com/Pedro-Camacho/FireSentinel",
     site: "https://fire-sentinel.vercel.app",
@@ -19,7 +19,7 @@ const projects = [
   },
   {
     title: "FE-Club",
-    description: "Jogo que aproxima fãs da Fórmula E — gerenciar equipes, competir globalmente, explorar tecnologias sustentáveis e interagir com a comunidade.",
+    description: "Meu primeiro projeto em React — foco total em construir um front-end polido e funcional. Aprendi componentização, estado e roteamento enquanto entregava uma interface de jogo completa.",
     image: FEclub,
     github: "https://github.com/RafaelDuarteF/fe-club-react",
     site: "https://fe-club-react.vercel.app",
@@ -27,7 +27,7 @@ const projects = [
   },
   {
     title: "Melodia",
-    description: "Plataforma de streaming de música com playlists personalizadas, descoberta de artistas e interface responsiva.",
+    description: "Interface de streaming construída com SASS e Bootstrap — arquitetura pensada para escalar com uma API real. Foco em UI consistente e experiência fluida de navegação entre playlists.",
     image: Melodia,
     github: "https://github.com/RafaelDuarteF/melodia",
     site: "https://melodia-gamma.vercel.app",
@@ -35,7 +35,7 @@ const projects = [
   },
   {
     title: "PortalFilmes",
-    description: "Portal que usa a API do TMDB para exibir filmes e séries com detalhes, trailers e listas pessoais.",
+    description: "Consome a API do TMDB para exibir filmes e séries com detalhes e trailers. Implementei sistema de favoritos persistido localmente — sem backend, sem perder dados entre sessões.",
     image: portalFilmes,
     github: "https://github.com/RafaelGbm/Portal-Filmes",
     site: "https://portal-filmes-alpha.vercel.app",
@@ -43,7 +43,7 @@ const projects = [
   },
   {
     title: "EcoTrend",
-    description: "E-commerce focado em produtos sustentáveis nas categorias de casa, tecnologia, roupas e beleza.",
+    description: "E-commerce com carrinho funcional, gerenciamento de estado dos produtos e catálogo por categorias. Foco na experiência de compra — do browse ao checkout.",
     image: ecoTrend,
     github: "https://github.com/Monteiro77/EcoTrend",
     site: "https://eco-trend-nine.vercel.app",
@@ -164,12 +164,7 @@ export default function Projetos() {
           viewport={{ once: true }}
           transition={{ delay: 0.35, duration: 0.5 }}
         >
-          <div className="hidden lg:flex lg:col-span-1">
-            <span className="font-mono text-[#1e1e1e] text-4xl font-black leading-none select-none">
-              {String(projects.length + 1).padStart(2, "0")}
-            </span>
-          </div>
-
+          {/* DOM order: image | content | number — padrão ímpar */}
           <div className="lg:col-span-4">
             <div
               className="relative overflow-hidden bg-[#0d0d0d] border border-dashed border-[#2a2a2a]"
@@ -206,6 +201,12 @@ export default function Projetos() {
               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
               work in progress
             </div>
+          </div>
+
+          <div className="hidden lg:flex lg:col-span-1">
+            <span className="font-mono text-[#1e1e1e] text-4xl font-black leading-none select-none">
+              {String(projects.length + 1).padStart(2, "0")}
+            </span>
           </div>
         </motion.div>
 
