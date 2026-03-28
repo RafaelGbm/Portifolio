@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { menuItems } from "../data/menuItems";
 import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar({ activeSection, onMenuClick }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,24 +66,35 @@ export default function Navbar({ activeSection, onMenuClick }) {
       </div>
 
       {/* Mobile dropdown */}
-      {isMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-[#080808] border-b border-[#141414] px-6 py-6 flex flex-col gap-5 md:hidden">
-          {menuItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => {
-                onMenuClick(item.id);
-                setIsMenuOpen(false);
-              }}
-              className={`text-xs uppercase tracking-widest text-left font-medium transition-colors duration-200 ${
-                activeSection === item.id ? "text-violet-400" : "text-[#444]"
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="absolute top-full left-0 w-full bg-[#080808] border-b border-[#141414] px-6 py-6 flex flex-col gap-5 md:hidden"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+          >
+            {menuItems.map((item, i) => (
+              <motion.button
+                key={item.id}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.04 }}
+                onClick={() => {
+                  onMenuClick(item.id);
+                  setIsMenuOpen(false);
+                }}
+                className={`text-xs uppercase tracking-widest text-left font-medium transition-colors duration-200 ${
+                  activeSection === item.id ? "text-violet-400" : "text-[#444]"
+                }`}
+              >
+                {item.label}
+              </motion.button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
