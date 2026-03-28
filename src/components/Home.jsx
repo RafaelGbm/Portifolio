@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Download } from "lucide-react";
+import { downloadCV } from "../utils";
 
 const TERMINAL_TEXTS = [
   "full-stack developer",
@@ -15,6 +16,7 @@ function TerminalLine() {
   const [charIdx, setCharIdx] = useState(0);
   const [deleting, setDeleting] = useState(false);
   const [paused, setPaused] = useState(false);
+  const pauseTimerRef = useRef(null);
 
   useEffect(() => {
     if (paused) return;
@@ -27,7 +29,7 @@ function TerminalLine() {
         setCharIdx((c) => c + 1);
       } else if (!deleting && charIdx === word.length) {
         setPaused(true);
-        setTimeout(() => {
+        pauseTimerRef.current = setTimeout(() => {
           setPaused(false);
           setDeleting(true);
         }, 2000);
@@ -42,6 +44,10 @@ function TerminalLine() {
 
     return () => clearTimeout(timer);
   }, [charIdx, deleting, paused, wordIdx]);
+
+  useEffect(() => {
+    return () => clearTimeout(pauseTimerRef.current);
+  }, []);
 
   return (
     <div className="font-mono text-sm md:text-base flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -62,32 +68,22 @@ export default function Home() {
     document.getElementById("projetos")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const downloadCV = () => {
-    const link = document.createElement("a");
-    link.href = "/CV.pdf";
-    link.download = "Rafael_Gaspar_CV.pdf";
-    link.click();
-  };
-
   return (
     <section
       id="home"
       className="min-h-screen flex flex-col justify-center px-6 lg:px-16 pt-28 pb-20 relative overflow-hidden"
     >
-
       <motion.div
         className="relative max-w-5xl"
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
       >
-        {/* Availability badge */}
         <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#444] mb-10">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          disponível para estágio
+          disponível para oportunidades
         </div>
 
-        {/* Massive name */}
         <h1
           className="font-black leading-[0.88] tracking-tighter mb-3 select-none"
           style={{ fontSize: "clamp(4.5rem, 13vw, 11rem)" }}
@@ -96,21 +92,18 @@ export default function Home() {
           <span className="block text-stroke">GASPAR</span>
         </h1>
 
-        {/* Thin accent line */}
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-4 mb-10">
           <div className="h-px w-12 bg-violet-500" />
           <span className="font-mono text-[10px] uppercase tracking-widest text-[#333]">
             São Paulo · Brasil
           </span>
         </div>
 
-        {/* Terminal line */}
-        <div className="mb-12">
+        <div className="mb-16">
           <TerminalLine />
         </div>
 
-        {/* CTAs */}
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-4">
           <button
             onClick={scrollToProjects}
             className="inline-flex items-center gap-2 bg-violet-500 hover:bg-violet-400 text-white text-sm font-medium py-3 px-6 transition-colors duration-200"
@@ -128,7 +121,6 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* Year stamp — bottom right */}
       <motion.div
         className="absolute bottom-8 right-6 lg:right-16 font-mono text-[10px] uppercase tracking-widest text-[#282828] select-none"
         initial={{ opacity: 0 }}
@@ -138,7 +130,6 @@ export default function Home() {
         © 2025
       </motion.div>
 
-      {/* Scroll indicator */}
       <motion.div
         className="absolute bottom-8 left-6 lg:left-16 flex flex-col items-center gap-2"
         initial={{ opacity: 0 }}
