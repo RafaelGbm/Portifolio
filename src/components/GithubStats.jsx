@@ -1,92 +1,109 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { GitCommit, Users, BookOpen, ArrowUpRight } from "lucide-react";
+import SectionHeader from "./SectionHeader";
+import { fadeUp } from "../utils";
+
+const GITHUB_USER = "RafaelGbm";
+
+async function fetchGithubData() {
+  const [user, commitsSearch] = await Promise.all([
+    fetch(`https://api.github.com/users/${GITHUB_USER}`).then((r) => r.json()),
+    fetch(`https://api.github.com/search/commits?q=author:${GITHUB_USER}`, {
+      headers: { Accept: "application/vnd.github.cloak-preview+json" },
+    }).then((r) => r.json()),
+  ]);
+
+  return { user, totalCommits: commitsSearch.total_count ?? 0 };
+}
+
+
+const STREAK_URL = `https://streak-stats.demolab.com/?user=${GITHUB_USER}&hide_border=true&background=111111&ring=8b5cf6&fire=a78bfa&currStreakLabel=a78bfa&sideLabels=555555&dates=444444&currStreakNum=f0f0f0&sideNums=f0f0f0&stroke=1e1e1e`;
 
 export default function GithubStats() {
-  const user = "RafaelGbm";
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(false);
 
-  const statsUrl = `https://github-readme-stats.vercel.app/api?username=${user}&show_icons=true&count_private=true&hide_border=true&bg_color=0f0f0f&title_color=a78bfa&text_color=888888&icon_color=7c3aed&ring_color=7c3aed`;
+  useEffect(() => {
+    fetchGithubData()
+      .then(setData)
+      .catch(() => setError(true));
+  }, []);
 
-  const langsUrl = `https://github-readme-stats.vercel.app/api/top-langs/?username=${user}&layout=compact&hide_border=true&bg_color=0f0f0f&title_color=a78bfa&text_color=888888`;
-
-  const streakUrl = `https://streak-stats.demolab.com/?user=${user}&hide_border=true&background=0f0f0f&ring=7c3aed&fire=a78bfa&currStreakLabel=a78bfa&sideLabels=666666&dates=444444&currStreakNum=f0f0f0&sideNums=f0f0f0&stroke=0f0f0f`;
+  const statCards = data
+    ? [
+        { icon: BookOpen,  label: "Repositórios",  value: data.user.public_repos },
+        { icon: Users,     label: "Seguidores",    value: data.user.followers },
+        { icon: GitCommit, label: "Commits totais", value: data.totalCommits.toLocaleString("pt-BR") },
+      ]
+    : Array(3).fill(null);
 
   return (
     <section id="github-stats" className="py-24 px-6 lg:px-16">
-      {/* Section header with number */}
-      <div className="relative mb-16">
-        <span className="absolute -top-10 left-0 font-black text-[7rem] leading-none text-[#111] select-none pointer-events-none">
-          05
-        </span>
-        <div className="relative">
-          <div className="font-mono text-xs uppercase tracking-widest text-[#444] mb-4">
-            // github
+      <SectionHeader number="05" label="github" title="Atividade" flip />
+
+      {error && (
+        <p className="text-[#444] text-sm font-mono">Não foi possível carregar os dados do GitHub.</p>
+      )}
+
+      {!error && (
+        <div className="max-w-5xl flex flex-col gap-4">
+
+          {/* Stat cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {statCards.map((stat, i) => (
+              <motion.div
+                key={i}
+                className="bg-[#111] border border-[#1e1e1e] p-6 flex flex-col gap-3 hover:border-violet-500/40 transition-colors duration-200"
+                {...fadeUp(i * 0.07)}
+              >
+                {stat ? (
+                  <>
+                    <stat.icon size={18} className="text-violet-400" />
+                    <div className="text-4xl font-black text-[#f0f0f0]">{stat.value}</div>
+                    <div className="font-mono text-[10px] uppercase tracking-widest text-[#555]">
+                      {stat.label}
+                    </div>
+                  </>
+                ) : (
+                  <div className="animate-pulse space-y-3">
+                    <div className="w-5 h-5 bg-[#1e1e1e] rounded" />
+                    <div className="w-16 h-8 bg-[#1e1e1e] rounded" />
+                    <div className="w-24 h-3 bg-[#1e1e1e] rounded" />
+                  </div>
+                )}
+              </motion.div>
+            ))}
           </div>
-          <h2
-            className="font-black text-[#f0f0f0] leading-tight tracking-tighter"
-            style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
-          >
-            Atividade
-          </h2>
+
+          {/* Streak */}
+          <motion.div
+              className="bg-[#111] border border-[#1e1e1e] p-6 flex flex-col hover:border-violet-500/40 transition-colors duration-200"
+              {...fadeUp(0.3)}
+            >
+              <div className="font-mono text-[10px] uppercase tracking-widest text-[#555] mb-5">
+                sequência de contribuições
+              </div>
+              <div className="flex-1 flex items-center justify-center">
+                <img
+                  src={STREAK_URL}
+                  alt="GitHub Streak"
+                  className="w-full max-w-lg"
+                  loading="lazy"
+                />
+              </div>
+              <a
+                href={`https://github.com/${GITHUB_USER}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 self-start inline-flex items-center gap-2 text-[#555] hover:text-violet-400 text-xs font-mono transition-colors"
+              >
+                Ver perfil no GitHub
+                <ArrowUpRight size={12} />
+              </a>
+            </motion.div>
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl">
-        {/* General stats */}
-        <motion.div
-          className="bg-[#0f0f0f] border border-[#1e1e1e] p-6 flex flex-col gap-3 hover:border-violet-500/30 transition-colors duration-200"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="font-mono text-[10px] uppercase tracking-widest text-[#444]">
-            estatísticas gerais
-          </div>
-          <img
-            src={statsUrl}
-            alt="GitHub Stats"
-            className="w-full"
-            loading="lazy"
-          />
-        </motion.div>
-
-        {/* Top languages */}
-        <motion.div
-          className="bg-[#0f0f0f] border border-[#1e1e1e] p-6 flex flex-col gap-3 hover:border-violet-500/30 transition-colors duration-200"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          <div className="font-mono text-[10px] uppercase tracking-widest text-[#444]">
-            linguagens mais usadas
-          </div>
-          <img
-            src={langsUrl}
-            alt="Top Languages"
-            className="w-full"
-            loading="lazy"
-          />
-        </motion.div>
-
-        {/* Streak */}
-        <motion.div
-          className="md:col-span-2 bg-[#0f0f0f] border border-[#1e1e1e] p-6 flex flex-col gap-3 hover:border-violet-500/30 transition-colors duration-200"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <div className="font-mono text-[10px] uppercase tracking-widest text-[#444]">
-            sequência de contribuições
-          </div>
-          <img
-            src={streakUrl}
-            alt="GitHub Streak"
-            className="w-full max-w-2xl mx-auto"
-            loading="lazy"
-          />
-        </motion.div>
-      </div>
+      )}
     </section>
   );
 }
