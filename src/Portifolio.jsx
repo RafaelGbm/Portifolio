@@ -8,6 +8,7 @@ import Contato from "./components/Contato";
 import Footer from "./components/Footer";
 import GithubStats from "./components/GithubStats";
 import Skills from "./components/Skills";
+import Background from "./components/Background";
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("home");
@@ -26,12 +27,14 @@ export default function Portfolio() {
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div style={{ position: "relative", zIndex: 1 }}>
+    <>
+      <Background />
+      <div style={{ position: "relative", zIndex: 1 }}>
       <Navbar activeSection={activeSection} onMenuClick={scrollToSection} />
       <Home />
       <SobreMim />
@@ -41,6 +44,7 @@ export default function Portfolio() {
       <GithubStats />
       <Contato />
       <Footer />
-    </div>
+      </div>
+    </>
   );
 }
