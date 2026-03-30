@@ -36,7 +36,7 @@ export default function Navbar({ activeSection, onMenuClick }) {
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           className="text-xl font-bold cursor-pointer select-none font-mono tracking-tight text-[#f0f0f0]"
         >
-          RG<span className="text-violet-500">.</span>
+          <span className="text-violet-500">/</span>GASPAR<span className="text-violet-500">_</span>
         </h1>
 
         {/* Desktop menu */}

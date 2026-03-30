@@ -11,7 +11,7 @@ export default function Footer() {
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="font-mono text-xl font-bold text-[#f0f0f0] cursor-pointer select-none mb-1"
           >
-            RG<span className="text-violet-500">.</span>
+            <span className="text-violet-500">/</span>GASPAR<span className="text-violet-500">_</span>
           </div>
           <p className="font-mono text-[10px] uppercase tracking-widest text-[#333]">
             Rafael Gaspar · Full Stack Dev

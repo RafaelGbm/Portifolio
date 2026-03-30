@@ -57,7 +57,7 @@ function ProjectRow({ proj, index }) {
 
   return (
     <motion.div
-      className="group border-t border-[#1e1e1e] py-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center hover:border-violet-500/30 transition-colors duration-300"
+      className="group border-t border-[#1e1e1e] py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-14 items-center hover:border-violet-500/30 transition-colors duration-300"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -71,10 +71,10 @@ function ProjectRow({ proj, index }) {
       </div>
 
       {/* Image */}
-      <div className={`order-1 lg:col-span-4 ${isEven ? "lg:order-2" : "lg:order-1"}`}>
+      <div className={`order-1 lg:col-span-5 ${isEven ? "lg:order-2" : "lg:order-1"}`}>
         <div
           className="relative overflow-hidden bg-[#111] border border-[#1e1e1e] group-hover:border-violet-500/30 transition-colors duration-300"
-          style={{ aspectRatio: "16/9" }}
+          style={{ aspectRatio: "3/2" }}
         >
           <img
             src={proj.image}
@@ -91,7 +91,7 @@ function ProjectRow({ proj, index }) {
       </div>
 
       {/* Content */}
-      <div className={`order-2 lg:col-span-7 ${isEven ? "lg:order-3" : "lg:order-2"}`}>
+      <div className={`order-2 lg:col-span-6 ${isEven ? "lg:order-3" : "lg:order-2"}`}>
         <div className="flex flex-wrap gap-1.5 mb-3">
           {proj.tags.map((tag) => (
             <span
@@ -103,11 +103,11 @@ function ProjectRow({ proj, index }) {
           ))}
         </div>
 
-        <h3 className="text-[#f0f0f0] font-black text-xl md:text-2xl tracking-tight mb-2 group-hover:text-white transition-colors duration-200">
+        <h3 className="text-[#f0f0f0] font-black text-2xl md:text-3xl tracking-tight mb-3 group-hover:text-white transition-colors duration-200">
           {proj.title}
         </h3>
 
-        <p className="text-[#444] group-hover:text-[#666] text-sm leading-relaxed mb-4 transition-colors duration-200 max-w-md">
+        <p className="text-[#444] group-hover:text-[#666] text-sm leading-relaxed mb-6 transition-colors duration-200 max-w-lg">
           {proj.description}
         </p>
 
@@ -141,7 +141,7 @@ function ProjectRow({ proj, index }) {
 
 export default function Projetos() {
   return (
-    <section id="projetos" className="py-24 px-6 lg:px-16">
+    <section id="projetos" className="py-16 px-6 lg:px-16">
       <div className="flex items-end justify-between flex-wrap gap-4 mb-4">
         <div className="flex-1">
           <SectionHeader number="03" label="projetos" title="Trabalhos" />
@@ -151,24 +151,24 @@ export default function Projetos() {
         </span>
       </div>
 
-      <div className="max-w-5xl">
+      <div className="max-w-[68rem]">
         {projects.map((proj, idx) => (
           <ProjectRow key={idx} proj={proj} index={idx} />
         ))}
 
         {/* Projeto secreto */}
         <motion.div
-          className="border-t border-[#1e1e1e] py-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center group"
+          className="border-t border-[#1e1e1e] py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-14 items-center group"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.35, duration: 0.5 }}
         >
           {/* DOM order: image | content | number — padrão ímpar */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-5">
             <div
               className="relative overflow-hidden bg-[#0d0d0d] border border-dashed border-[#2a2a2a]"
-              style={{ aspectRatio: "16/9" }}
+              style={{ aspectRatio: "3/2" }}
             >
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
                 <div className="w-6 h-6 rounded-full border-2 border-[#2a2a2a] border-t-violet-500/50 animate-spin" />
@@ -179,7 +179,7 @@ export default function Projetos() {
             </div>
           </div>
 
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-6">
             <div className="flex gap-1.5 mb-3">
               <span className="font-mono text-[9px] uppercase tracking-widest text-violet-400/50 border border-violet-500/10 px-2 py-0.5">
                 React Native
@@ -189,11 +189,11 @@ export default function Projetos() {
               </span>
             </div>
 
-            <h3 className="text-[#333] font-black text-xl md:text-2xl tracking-tight mb-2">
+            <h3 className="text-[#333] font-black text-2xl md:text-3xl tracking-tight mb-3">
               Projeto Confidencial
             </h3>
 
-            <p className="text-[#2a2a2a] text-sm leading-relaxed mb-4 max-w-md">
+            <p className="text-[#2a2a2a] text-sm leading-relaxed mb-6 max-w-lg">
               Algo que estou construindo com muito cuidado. Ainda não é hora — mas em breve.
             </p>
 

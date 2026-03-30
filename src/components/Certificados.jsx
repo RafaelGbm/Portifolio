@@ -33,6 +33,12 @@ const certifications = [
     year: "2023",
     description: "Coleta, processamento e análise de grandes volumes de dados para tomada de decisão.",
   },
+  {
+    name: "React Native",
+    institution: "Alura",
+    year: "2025",
+    description: "Desenvolvimento de aplicações mobile multiplataforma com React Native, navegação e consumo de APIs.",
+  },
 ];
 
 export default function Certificados() {
@@ -40,7 +46,7 @@ export default function Certificados() {
     <section id="certificados" className="py-24 px-6 lg:px-16">
       <SectionHeader number="04" label="certificados" title="Certificações" flip />
 
-      <div className="max-w-4xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16">
         {certifications.map((cert, idx) => (
           <motion.div
             key={idx}
@@ -76,7 +82,6 @@ export default function Certificados() {
             </div>
           </motion.div>
         ))}
-        <div className="border-t border-[#1e1e1e]" />
       </div>
     </section>
   );

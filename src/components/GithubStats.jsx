@@ -44,43 +44,66 @@ export default function GithubStats() {
       <SectionHeader number="05" label="github" title="Atividade" flip />
 
       {error && (
-        <p className="text-[#444] text-sm font-mono">Não foi possível carregar os dados do GitHub.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="border border-[#1e1e1e] divide-y divide-[#1e1e1e] flex flex-col">
+            {[{ icon: BookOpen, label: "Repositórios" }, { icon: Users, label: "Seguidores" }, { icon: Star, label: "Estrelas" }].map((s, i) => (
+              <div key={i} className="flex items-center gap-5 p-6">
+                <s.icon size={16} className="text-[#2a2a2a] shrink-0" />
+                <div className="text-3xl font-black text-[#2a2a2a] leading-none">—</div>
+                <div className="font-mono text-[10px] uppercase tracking-widest text-[#2a2a2a] ml-auto">{s.label}</div>
+              </div>
+            ))}
+          </div>
+          <div className="lg:col-span-2 border border-[#1e1e1e] p-6 flex flex-col items-center justify-center gap-3 min-h-[180px]">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-[#2a2a2a]">GitHub indisponível no momento</span>
+            <a
+              href={`https://github.com/RafaelGbm`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-[#444] hover:text-violet-400 text-xs font-mono transition-colors"
+            >
+              Ver perfil no GitHub <ArrowUpRight size={12} />
+            </a>
+          </div>
+        </div>
       )}
 
       {!error && (
-        <div className="max-w-5xl flex flex-col gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-          {/* Stat cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Stat list */}
+          <motion.div
+            className="border border-[#1e1e1e] divide-y divide-[#1e1e1e] flex flex-col"
+            {...fadeUp(0)}
+          >
             {statCards.map((stat, i) => (
-              <motion.div
+              <div
                 key={i}
-                className="bg-[#111] border border-[#1e1e1e] p-6 flex flex-col gap-3 hover:border-violet-500/40 transition-colors duration-200"
-                {...fadeUp(i * 0.07)}
+                className="flex items-center gap-5 p-6 hover:bg-[#0d0d0d] transition-colors duration-200 group flex-1"
               >
                 {stat ? (
                   <>
-                    <stat.icon size={18} className="text-violet-400" />
-                    <div className="text-4xl font-black text-[#f0f0f0]">{stat.value}</div>
-                    <div className="font-mono text-[10px] uppercase tracking-widest text-[#555]">
+                    <stat.icon size={16} className="text-violet-400 shrink-0" />
+                    <div className="text-3xl font-black text-[#f0f0f0] leading-none">{stat.value}</div>
+                    <div className="font-mono text-[10px] uppercase tracking-widest text-[#555] ml-auto">
                       {stat.label}
                     </div>
                   </>
                 ) : (
-                  <div className="animate-pulse space-y-3">
-                    <div className="w-5 h-5 bg-[#1e1e1e] rounded" />
-                    <div className="w-16 h-8 bg-[#1e1e1e] rounded" />
-                    <div className="w-24 h-3 bg-[#1e1e1e] rounded" />
+                  <div className="animate-pulse flex items-center gap-5 w-full">
+                    <div className="w-4 h-4 bg-[#1e1e1e] rounded" />
+                    <div className="w-12 h-7 bg-[#1e1e1e] rounded" />
+                    <div className="w-20 h-3 bg-[#1e1e1e] rounded ml-auto" />
                   </div>
                 )}
-              </motion.div>
+              </div>
             ))}
-          </div>
+          </motion.div>
 
           {/* Streak */}
           <motion.div
-            className="bg-[#111] border border-[#1e1e1e] p-6 flex flex-col hover:border-violet-500/40 transition-colors duration-200"
-            {...fadeUp(0.3)}
+            className="lg:col-span-2 border border-[#1e1e1e] p-6 flex flex-col hover:border-violet-500/40 transition-colors duration-200"
+            {...fadeUp(0.15)}
           >
             <div className="font-mono text-[10px] uppercase tracking-widest text-[#555] mb-5">
               sequência de contribuições
@@ -89,7 +112,7 @@ export default function GithubStats() {
               <img
                 src={STREAK_URL}
                 alt="GitHub Streak"
-                className="w-full max-w-lg"
+                className="w-full max-w-2xl"
                 loading="lazy"
               />
             </div>
