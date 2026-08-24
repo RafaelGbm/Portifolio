@@ -5,18 +5,51 @@ import SectionHeader from "./SectionHeader";
 import { fadeUp } from "../utils";
 
 const GITHUB_USER = "RafaelGbm";
+const CACHE_KEY = `github-stats-${GITHUB_USER}`;
+const CACHE_TTL = 60 * 60 * 1000; // 1h — evita estourar o rate limit de 60 req/h do GitHub
+
+async function fetchJson(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+  return res.json();
+}
 
 async function fetchGithubData() {
+  const cached = readCache();
+  if (cached) return cached;
+
   const [user, repos] = await Promise.all([
-    fetch(`https://api.github.com/users/${GITHUB_USER}`).then((r) => r.json()),
-    fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100`).then((r) => r.json()),
+    fetchJson(`https://api.github.com/users/${GITHUB_USER}`),
+    fetchJson(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100`),
   ]);
 
   const totalStars = Array.isArray(repos)
     ? repos.reduce((sum, repo) => sum + repo.stargazers_count, 0)
     : 0;
 
-  return { user, totalStars };
+  const data = { user, totalStars };
+  writeCache(data);
+  return data;
+}
+
+function readCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const { data, timestamp } = JSON.parse(raw);
+    if (Date.now() - timestamp > CACHE_TTL) return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function writeCache(data) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
+  } catch {
+    // localStorage indisponível (modo privado, quota etc.) — segue sem cache
+  }
 }
 
 const STREAK_URL = `https://streak-stats.demolab.com/?user=${GITHUB_USER}&hide_border=true&background=111111&ring=8b5cf6&fire=a78bfa&currStreakLabel=a78bfa&sideLabels=555555&dates=444444&currStreakNum=f0f0f0&sideNums=f0f0f0&stroke=1e1e1e`;
